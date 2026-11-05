@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AYOMI FOUNDATIONS</title>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font:15px/1.6 system-ui,sans-serif;background:#07070a;color:#f6f7fb}
+h1,h2,h3{font-family:Georgia,serif}a{color:inherit;text-decoration:none}.hidden{display:none!important}
+.w{width:min(1050px,92%);margin:auto}section{padding:36px 0}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 4%;border-bottom:1px solid #242430;position:sticky;top:0;background:#07070af2;z-index:5}
+.br{font:800 18px Georgia;letter-spacing:1px}.br b{color:#e6ba3f}
+button{font:inherit;cursor:pointer}.b{background:linear-gradient(135deg,#e6ba3f,#f7dd8b);color:#111;border:0;padding:11px 18px;border-radius:9px;font-weight:700;margin:3px 3px 3px 0}
+.b.o{background:none;color:#fff;border:1px solid #3a3a48}.b.s{padding:6px 11px;font-size:13px}.b:disabled{opacity:.45;cursor:not-allowed}
+.hero{padding:70px 0 30px}h1{font-size:clamp(34px,7vw,62px);line-height:1.05;margin:10px 0}h1 i{color:#e6ba3f;font-style:normal}
+.g{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin:18px 0}
+.c{background:#111116;border:1px solid #242430;border-radius:16px;padding:22px}.c p{margin:8px 0;color:#b3b3c0}
+.t{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:800;background:#1c1c24;color:#9a9aa8;margin:2px}
+.t.ok{background:#123324;color:#57d38c}.t.w{background:#332a10;color:#f2c94c}.t.r{background:#331616;color:#ff6b6b}
+#m{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;padding:14px;z-index:50}#m.on{display:flex}
+#mb{background:#111116;border:1px solid #242430;border-radius:16px;padding:22px;width:min(580px,100%);max-height:92vh;overflow:auto}
+input,select,textarea{width:100%;background:#0a0a0d;border:1px solid #2c2c38;color:#fff;padding:11px;border-radius:9px;margin:5px 0 11px;font:inherit}
+.msg{padding:10px;border-radius:8px;margin-bottom:10px}.e{background:#331616;color:#ff8b8b}.k{background:#123324;color:#57d38c}
+.acct{border:1px solid #e6ba3f;border-radius:10px;padding:12px;font-weight:800;line-height:1.7;margin:10px 0}
+.q{background:#141419;border-radius:10px;padding:12px;margin-bottom:10px}.q label{display:block}.q input{width:auto;margin:0 8px 0 0}
+#tm{position:sticky;top:-22px;background:#111116;padding:8px 0;font-weight:800;color:#f7dd8b;z-index:2}
+.r1{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;background:#141419;border:1px solid #242430;border-radius:10px;padding:12px;margin:8px 0}
+footer{padding:30px;text-align:center;color:#7d7d8c;border-top:1px solid #242430;font-size:13px}
+#fp{position:fixed;right:16px;bottom:16px;z-index:9}
+.bw{display:flex;align-items:center}
+.bat{position:relative;flex:1;height:48px;border:3px solid #e6ba3f;border-radius:10px;overflow:hidden;background:#0a0a0d}
+.bat::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 2px),#111116 calc(10% - 2px) 10%)}
+.bf{height:100%;background:linear-gradient(90deg,#b8902c,#f7dd8b);transition:width 1.4s ease;position:relative;overflow:hidden}
+.bf::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,#fff7,transparent);animation:chg 2s linear infinite}
+@keyframes chg{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.bn{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;text-shadow:0 1px 4px #000}
+.bt{width:9px;height:22px;background:#e6ba3f;border-radius:0 5px 5px 0}
+</style></head><body>
+
+<div id="site">
+<header><a class="br" href="#">AYOMI <b>FOUNDATIONS</b></a><button class="b o s" onclick="auth('login')">Login</button></header>
+<div class="w">
+<div class="hero"><p style="color:#e6ba3f;letter-spacing:3px;font-size:12px">UNLEASHING LIFETIME POTENTIALS</p>
+<h1>Where potential meets <i>opportunity.</i></h1>
+<p style="max-width:600px;color:#b3b3c0;margin:14px 0 22px">Academic competitions, conferences and opportunities that help young people learn, compete, connect and grow.</p>
+<button class="b" onclick="auth('signup')">Create profile</button></div>
+
+<section><h2>Programs</h2><div class="g">
+<div class="c"><h3>AYOMI STEM Contest 2.0</h3><p>Physics, Chemistry, Biology and Mathematics. Needs a UTME registration number starting with 2025 or 2026, and admin approval.</p><p><span class="t ok">Registration open</span></p><div id="sl" style="margin:10px 0"></div><button class="b" onclick="stem()">Register / My portal</button></div>
+<div class="c"><h3>The Explicit Conference 2.0</h3><p style="color:#f7dd8b">&ldquo;Questioning Tradition, Challenging Innovation&rdquo;</p><p id="cc"></p><button class="b" onclick="conf()">Register / My portal</button></div>
+</div></section>
+
+<section><h2>Your dashboard</h2>
+<div class="c" id="lo"><p>Create a profile or log in to register and see your status.</p><button class="b" onclick="auth('signup')">Create profile</button><button class="b o" onclick="auth('login')">Login</button></div>
+<div class="c hidden" id="li"><h3 id="wl"></h3><p><span class="t ok">Profile active</span></p>
+<p>STEM: <span id="st"></span></p><p>Conference: <span id="cs"></span></p>
+<button class="b" onclick="stem()">My STEM portal</button><button class="b" onclick="conf()">My conference portal</button>
+<button class="b o" id="res" onclick="printRes()">Result slip</button><button class="b o" id="cert" onclick="cert()">Certificate</button>
+<button class="b o" onclick="pw()">Change password</button><button class="b o" onclick="db.auth.signOut()">Log out</button></div>
+</section></div>
+<footer>&copy; 2026 AYOMI FOUNDATIONS &bull; <a href="#admin">Admin</a></footer>
+<button id="fp" class="b hidden" onclick="payInfo()">&#8358; Payment details</button>
+</div>
+
+<div id="ad" class="hidden"></div>
+<div id="m"><div id="mb"></div></div>
+
+<script>
+const db=supabase.createClient('https://nprwjwlnkyndkrcneznp.supabase.co','sb_publishable_YH-SuH2kxZK09jHD-qnIPw_eweSB7Ct');
+const ADMIN='aderounmuayomide6@gmail.com',WA='https://wa.me/2349034001456',SUBJ=['Physics','Chemistry','Biology','Mathematics'];
+const $=i=>document.getElementById(i);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=d=>d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}):'-';
+const show=h=>{$('mb').innerHTML=h;$('m').classList.add('on')},hide=()=>$('m').classList.remove('on');
+const msg=(t,k='e')=>`<div class="msg ${k}">${esc(t)}</div>`;
+let S={conference_open:false,certificates_open:false,exam_day:'2026-11-20'},EX=[],TM=null,DL=0,BUSY=false,AD=[];
+
+async function user(){return (await db.auth.getUser()).data.user}
+async function me(){const u=await user();if(!u)return null;
+ let {data}=await db.from('profiles').select('*').eq('id',u.id).maybeSingle();
+ if(!data){await db.from('profiles').insert({id:u.id,email:u.email,name:u.user_metadata.name||'',phone:u.user_metadata.phone||''});
+  data=(await db.from('profiles').select('*').eq('id',u.id).maybeSingle()).data}
+ return data}
+async function loadS(){const {data}=await db.from('settings').select('*').eq('id',1).maybeSingle();if(data)S=data}
+function pr(h){const w=window.open('','_blank');if(!w)return alert('Allow pop-ups to print.');
+ w.document.write('<html><head><title>AYOMI FOUNDATIONS</title></head><body style="font-family:Georgia,serif;padding:30px">'+h+'</body></html>');w.document.close();setTimeout(()=>w.print(),400)}
+const pay=()=>`<div class="acct">Amount: &#8358;1,200<br><small>(&#8358;1,000 for the event + &#8358;200 website processing)</small><br>Bank: BC KASH MFB<br>Account Name: THE EXPLICIT CONFERENCE<br>Account Number: 1100469981</div><p style="font-size:13px;color:#b3b3c0">After paying, send your receipt on WhatsApp for verification: <a href="${WA}" target="_blank" style="color:#f7dd8b;font-weight:700">+234 903 400 1456</a></p>`;
+const payInfo=()=>show(`<h2>Conference payment</h2>${pay()}<button class="b o" onclick="hide()">Close</button>`);
+
+/* ---------- auth ---------- */
+function auth(m){const s=m==='signup';
+ show(`<h2>${s?'Create profile':m==='forgot'?'Reset password':'Login'}</h2><div id="am"></div>`+
+ (s?'<input id="n" placeholder="Full name"><input id="ph" placeholder="Phone number">':'')+
+ '<input id="e" type="email" placeholder="Email">'+(m==='forgot'?'':'<input id="p" type="password" placeholder="Password (min 6)">')+
+ (s?'<input id="p2" type="password" placeholder="Confirm password">':'')+
+ `<button class="b" onclick="${m}Go()">${s?'Create profile':m==='forgot'?'Send reset link':'Login'}</button><button class="b o" onclick="hide()">Cancel</button>`+
+ '<p style="margin-top:10px;font-size:13px">'+(m==='login'?`<a href="#" onclick="auth('signup');return false">Create profile</a> &middot; <a href="#" onclick="auth('forgot');return false">Forgot password?</a>`:`<a href="#" onclick="auth('login');return false">Login</a>`)+'</p>')}
+async function signupGo(){const n=$('n').value.trim(),e=$('e').value.trim().toLowerCase(),ph=$('ph').value.trim(),p=$('p').value;
+ if(!n||!e||!ph||p.length<6)return $('am').innerHTML=msg('Complete all fields (password min 6 characters).');
+ if(p!==$('p2').value)return $('am').innerHTML=msg('Passwords do not match.');
+ const {data,error}=await db.auth.signUp({email:e,password:p,options:{data:{name:n,phone:ph}}});
+ if(error)return $('am').innerHTML=msg(error.message);
+ if(data.session){hide();dash()}else $('am').innerHTML=msg('Profile created. Please log in.','k')}
+async function loginGo(){const {error}=await db.auth.signInWithPassword({email:$('e').value.trim().toLowerCase(),password:$('p').value});
+ if(error)return $('am').innerHTML=msg(error.message);hide();dash()}
+async function forgotGo(){const {error}=await db.auth.resetPasswordForEmail($('e').value.trim().toLowerCase(),{redirectTo:location.href.split('#')[0]});
+ $('am').innerHTML=error?msg(error.message):msg('Reset link sent. Check your email.','k')}
+function pw(){show(`<h2>New password</h2><div id="am"></div><input id="np" type="password" placeholder="New password (min 6)"><button class="b" onclick="pwGo()">Save</button><button class="b o" onclick="hide()">Close</button>`)}
+async function pwGo(){const p=$('np').value;if(p.length<6)return $('am').innerHTML=msg('Minimum 6 characters.');
+ const {error}=await db.auth.updateUser({password:p});$('am').innerHTML=error?msg(error.message):msg('Password updated.','k')}
+
+/* ---------- dashboard ---------- */
+const confTag=p=>p.conf_payment_status==='PAID'?'<span class="t ok">Paid &amp; verified</span>':p.conf_registered?'<span class="t w">Pending verification</span>':'<span class="t">Not registered</span>';
+const stemTag=p=>!p.stem_registered?'<span class="t">Not registered</span>':p.exam_taken?`<span class="t ok">Exam done: ${p.exam_score}/100</span>`:!p.stem_approved?'<span class="t w">Awaiting admin approval</span>':`<span class="t ok">Approved &middot; ${fd(p.exam_date)}</span>`;
+async function slots(){const {data,error}=await db.rpc('get_stem_slots');if(error)return;const n=data||0;
+ if(!$('bf'))$('sl').innerHTML='<div class="bw"><div class="bat"><div class="bf" id="bf" style="width:0"></div><span class="bn" id="bn">0 / 100</span></div><div class="bt"></div></div><div id="bs" style="font-size:12px;color:#9a9aa8;margin-top:6px"></div>';
+ requestAnimationFrame(()=>{$('bf').style.width=Math.min(100,n)+'%'});
+ $('bn').textContent=n+' / 100';
+ $('bs').innerHTML=n>=100?'<span class="t r">Slots full</span>':'Approved candidates &middot; updates live &middot; '+(100-n)+' slot'+(100-n===1?'':'s')+' left'}
+async function dash(){slots();await loadS();const p=await me();
+ $('cc').innerHTML=(S.conference_open?'<span class="t ok">Registration &amp; payment open</span>':'<span class="t r">Registration &amp; payment closed</span>')+'<br>Your entry ticket is issued after the admin verifies your payment.';
+ $('fp').classList.toggle('hidden',!S.conference_open);
+ $('lo').classList.toggle('hidden',!!p);$('li').classList.toggle('hidden',!p);if(!p)return;
+ $('wl').textContent='Welcome, '+(p.name||'').split(' ')[0];$('st').innerHTML=stemTag(p);$('cs').innerHTML=confTag(p);
+ $('res').disabled=!p.exam_taken;$('cert').disabled=!(p.conf_payment_status==='PAID'&&S.certificates_open)}
+
+/* ---------- STEM ---------- */
+async function stem(){const p=await me();if(!p)return auth('signup');
+ if(!p.stem_registered)return show(`<h2>AYOMI STEM Contest 2.0</h2><div id="am"></div><input id="us" placeholder="UTME score" inputmode="numeric"><input id="ur" placeholder="UTME reg number (starts with 2025 or 2026)"><button class="b" onclick="stemGo()">Register</button><button class="b o" onclick="hide()">Cancel</button>`);
+ let b;
+ if(p.exam_taken)b=`<h3>${p.exam_score} / 100</h3><p>${SUBJ.map(s=>s+': '+((p.exam_subject_scores||{})[s]??0)+'/25').join(' &middot; ')}</p><button class="b" onclick="printRes()">Print result slip</button>`;
+ else if(!p.stem_approved)b='<p>You have successfully registered. Please check back &mdash; your registration is awaiting admin approval. Your exam date will appear here once approved.</p>';
+ else b=`<p>Approved. Your exam date: <b>${fd(p.exam_date)}</b></p>`+(p.exam_opened?'<button class="b" onclick="room()">Enter exam room</button>':'<p>The exam is not open yet. The admin opens it on exam day.</p>');
+ show(`<h2>AYOMI STEM Contest 2.0</h2><p>Candidate ID: <b>${esc(p.candidate_id)}</b></p>${b}<p style="margin-top:12px"><button class="b o" onclick="hide()">Close</button></p>`)}
+async function stemGo(){const u=await user(),r=$('ur').value.trim().toUpperCase(),sv=$('us').value.trim();
+ if(!/^202[56]/.test(r))return $('am').innerHTML=msg('UTME registration number must start with 2025 or 2026.');
+ if(sv===''||+sv<0||+sv>400)return $('am').innerHTML=msg('Enter a valid UTME score (0-400).');
+ const {error}=await db.from('profiles').update({stem_registered:true,stem_utme_reg:r,stem_utme_score:+sv,candidate_id:'AF-'+Math.floor(100000+Math.random()*900000)}).eq('id',u.id);
+ if(error)return $('am').innerHTML=msg(error.message);dash();stem()}
+
+/* ---------- exam (20 minutes, one attempt) ---------- */
+async function room(){const p=await me();if(p.exam_taken)return stem();
+ const {data:a}=await db.from('exam_attempts').select('id').eq('user_id',p.id).eq('status','IN_PROGRESS').maybeSingle();
+ if(a)return begin();
+ show(`<h2>Exam room</h2><p>100 questions (25 each: Physics, Chemistry, Biology, Mathematics). You get <b>20 minutes</b> once you click Start. The timer cannot be paused and leaving this screen submits automatically. One attempt only.</p><button class="b" onclick="begin()">Start exam</button><button class="b o" onclick="hide()">Not yet</button>`)}
+async function begin(){const {data,error}=await db.rpc('start_exam');
+ if(error)return show(`<h2>Exam room</h2>${msg(error.message)}<button class="b o" onclick="hide()">Close</button>`);
+ EX=data.questions||[];DL=Date.parse(data.started_at)+data.seconds*1000;BUSY=false;
+ show('<div id="tm"></div>'+EX.map((q,i)=>`<div class="q"><b>${i+1}. [${esc(q.subject)}] ${esc(q.q)}</b>`+['a','b','c','d'].map(k=>`<label><input type="radio" name="q${q.id}" value="${k.toUpperCase()}">${esc(q[k])}</label>`).join('')+'</div>').join('')+'<button class="b" onclick="fin(true)">Submit</button><button class="b o" onclick="quit()">Quit (submit now)</button>');
+ clearInterval(TM);tick();TM=setInterval(tick,1000)}
+function tick(){const t=$('tm');if(!t){clearInterval(TM);TM=null;return}const r=DL-Date.now();
+ if(r<=0){t.textContent='Time left: 00:00';return fin(false)}const s=Math.floor(r/1000);
+ t.textContent='Time left: '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function quit(){if(confirm('Quit now? Your exam will be submitted immediately.'))fin(false)}
+async function fin(ask){if(BUSY)return;const a={};
+ EX.forEach(q=>{const c=document.querySelector(`input[name="q${q.id}"]:checked`);if(c)a[q.id]=c.value});
+ if(ask&&Object.keys(a).length<EX.length&&!confirm('You have unanswered questions. Submit anyway?'))return;
+ BUSY=true;clearInterval(TM);TM=null;
+ const {data,error}=await db.rpc('submit_exam',{p_answers:a});
+ if(error){BUSY=false;return show(msg(error.message))}
+ show(`<h2>Exam submitted</h2><h3>Score: ${data.score} / 100</h3><p>${SUBJ.map(s=>s+': '+(data.subjects[s]??0)+'/25').join(' &middot; ')}</p><button class="b" onclick="printRes()">Print result slip</button><button class="b o" onclick="hide()">Close</button>`);dash()}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&TM)fin(false)});
+async function printRes(){const p=await me();if(!p||!p.exam_taken)return;const s=p.exam_subject_scores||{};
+ pr(`<h2 style="text-align:center">AYOMI STEM CONTEST 2.0 &mdash; RESULT SLIP</h2><h1 style="text-align:center">${p.exam_score} / 100</h1><p>Name: ${esc(p.name)}<br>Candidate ID: ${esc(p.candidate_id)}</p><p>${SUBJ.map(x=>x+': '+(s[x]??0)+' / 25').join('<br>')}</p>`)}
+
+/* ---------- conference ---------- */
+async function conf(){const p=await me();if(!p)return auth('signup');await loadS();let b;
+ if(p.conf_payment_status==='PAID')b=`<div class="acct">Conference ID: ${esc(p.conf_id)}<br>${esc(p.conf_full_name||p.name)}<br>${esc(p.conf_level||'')} ${esc(p.conf_dept||'')}</div><button class="b" onclick="ticket()">Print entry ticket</button>`+(S.certificates_open?'<button class="b o" onclick="cert()">Print certificate</button>':'<p style="font-size:13px">Certificate printing opens when the admin releases it.</p>');
+ else if(p.conf_registered)b='<p><span class="t w">Pending verification</span></p><p>Your payment is pending. Send your receipt on WhatsApp so the admin can verify it.</p>'+pay();
+ else if(!S.conference_open)b='<p><span class="t r">Closed</span></p><p>Conference registration and payment are currently closed. Please check back.</p>';
+ else b=`<div id="am"></div><input id="cn" placeholder="Full name (for ticket and certificate)" value="${esc(p.name)}"><select id="cl"><option value="">Level</option>${['100L','200L','300L','400L','500L'].map(x=>`<option>${x}</option>`).join('')}</select><input id="cd" placeholder="Department">${pay()}<button class="b" onclick="confGo()">I've made the payment</button>`;
+ show(`<h2>The Explicit Conference 2.0</h2><p style="color:#f7dd8b">&ldquo;Questioning Tradition, Challenging Innovation&rdquo;</p>${b}<p style="margin-top:12px"><button class="b o" onclick="hide()">Close</button></p>`)}
+async function confGo(){const u=await user(),n=$('cn').value.trim(),l=$('cl').value,d=$('cd').value.trim();
+ if(!n||!l||!d)return $('am').innerHTML=msg('Please fill in every field.');
+ const {error}=await db.from('profiles').update({conf_registered:true,conf_full_name:n,conf_level:l,conf_dept:d}).eq('id',u.id);
+ if(error)return $('am').innerHTML=msg(error.message);dash();conf()}
+async function ticket(){const p=await me();if(!p||p.conf_payment_status!=='PAID')return;
+ pr(`<div style="max-width:420px;margin:auto;border:3px solid #d4af37;border-radius:14px;padding:24px;text-align:center"><h2>THE EXPLICIT CONFERENCE 2.0</h2><p><i>Questioning Tradition, Challenging Innovation</i></p><h3 style="margin:18px 0">ENTRY TICKET</h3><p><b>${esc(p.conf_full_name||p.name)}</b></p><p>${esc(p.conf_level||'')} ${esc(p.conf_dept||'')}</p><h2 style="margin-top:14px;letter-spacing:2px">${esc(p.conf_id)}</h2><p style="margin-top:14px;font-size:12px">AYOMI FOUNDATIONS &bull; UNLEASHING LIFETIME POTENTIALS</p></div>`)}
+async function cert(){const p=await me();await loadS();
+ if(!p||p.conf_payment_status!=='PAID'||!S.certificates_open)return alert('Certificates are not open yet.');
+ pr(`<div style="border:8px double #b8860b;padding:50px;text-align:center"><h3 style="color:#b8860b">AYOMI FOUNDATIONS</h3><h1 style="font-size:46px">CERTIFICATE</h1><h3>OF PARTICIPATION</h3><p style="margin-top:26px">This certifies that</p><h1 style="margin:14px 0;border-bottom:2px solid #b8860b;display:inline-block;padding:0 30px">${esc(p.conf_full_name||p.name)}</h1><p>has participated in</p><h2>THE EXPLICIT CONFERENCE 2.0</h2><p><i>with the theme: &ldquo;Questioning Tradition, Challenging Innovation&rdquo;</i></p><p>organized by Ayomi Foundations. Your presence, engagement and contribution are deeply appreciated.</p><p style="margin-top:30px">June 2027 &nbsp;&bull;&nbsp; Aderounmu Ayomide Samson, Convener</p></div>`)}
+
+/* ---------- admin ---------- */
+async function admin(){const p=await me();
+ if(!p||!p.is_admin){$('ad').innerHTML='<div class="c" style="max-width:420px;margin:60px auto"><h2>Admin login</h2><div id="aam"></div><input id="ae" type="email" placeholder="Admin email"><input id="ap" type="password" placeholder="Password"><button class="b" onclick="adminGo()">Login</button><a class="b o" href="#">Back</a></div>';return}
+ await loadS();const {data}=await db.from('profiles').select('*').order('created_at',{ascending:false});AD=data||[];draw()}
+async function adminGo(){const e=$('ae').value.trim().toLowerCase();
+ if(e!==ADMIN)return $('aam').innerHTML=msg('This account is not authorized for admin access.');
+ const {error}=await db.auth.signInWithPassword({email:e,password:$('ap').value});
+ if(error)return $('aam').innerHTML=msg(error.message);admin()}
+async function adminOut(){await db.auth.signOut();admin()}
+async function draw(){const sv=$('sq')?$('sq').value:'';
+ const cnt=await Promise.all(SUBJ.map(s=>db.from('questions').select('*',{count:'exact',head:true}).eq('subject',s)));
+ const tg=(f,l)=>`<p>${l}: ${S[f]?'<span class="t ok">OPEN</span>':'<span class="t r">CLOSED</span>'} <button class="b s" onclick="setS('${f}',${!S[f]})">${S[f]?'Close':'Open'}</button></p>`;
+ $('ad').innerHTML=`<div class="w" style="padding:24px 0"><h2>Admin <a class="b o s" href="#">Website</a><button class="b o s" onclick="adminOut()">Log out</button></h2>
+ <div class="c" style="margin:14px 0"><h3>Controls</h3>${tg('conference_open','Conference registration &amp; payment')}${tg('certificates_open','Certificate printing')}
+ <p>Exam for all approved candidates: <button class="b s" onclick="examAll(true)">Open for all</button><button class="b o s" onclick="examAll(false)">Close for all</button></p>
+ <p>Exam date given on approval: <b>${fd(S.exam_day)}</b></p><button class="b s" onclick="lbPDF()">Download leaderboard PDF (top 81)</button></div>
+ <div class="c" style="margin:14px 0"><h3>Participants</h3><input id="sq" placeholder="Search name, email or candidate ID" value="${esc(sv)}" oninput="rows()"><div id="rows"></div></div>
+ <div class="c" style="margin:14px 0"><h3>Exam questions</h3><p>${SUBJ.map((s,i)=>s+': '+(cnt[i].count||0)).join(' &middot; ')} (up to 1000+ per subject)</p>
+ <p>One question per line: Question | Option A | Option B | Option C | Option D | Answer letter</p>
+ <select id="qs">${SUBJ.map(s=>`<option>${s}</option>`).join('')}</select><textarea id="qt" rows="7" placeholder="What is the SI unit of force? | Newton | Joule | Watt | Pascal | A"></textarea>
+ <input type="file" accept=".txt,.csv" onchange="pick(event)"><button class="b" onclick="upq()">Upload to selected subject</button><p id="um"></p></div></div>`;rows()}
+function rows(){const q=$('sq').value.toLowerCase();
+ $('rows').innerHTML=AD.filter(p=>!q||((p.name||'')+(p.email||'')+(p.candidate_id||'')).toLowerCase().includes(q)).map(p=>{
+  let s='<span class="t">STEM: not registered</span>';
+  if(p.stem_registered){
+   if(p.exam_taken)s=`<span class="t ok">Score ${p.exam_score}/100</span>`;
+   else if(!p.stem_approved)s=`<span class="t w">STEM: awaiting approval</span><button class="b s" onclick="act('admin_approve_stem','${p.id}')">Approve</button>`;
+   else s=`<span class="t ok">Approved ${fd(p.exam_date)}</span><span class="t ${p.exam_opened?'ok':''}">${p.exam_opened?'Exam open':'Exam closed'}</span><button class="b o s" onclick="resched('${p.id}')">Reschedule</button>`}
+  let c='<span class="t">Conf: not registered</span>';
+  if(p.conf_payment_status==='PAID')c=`<span class="t ok">Paid ${esc(p.conf_id)}</span><button class="b o s" onclick="act('admin_unmark_conference_paid','${p.id}')">Undo</button>`;
+  else if(p.conf_registered)c=`<span class="t w">Conf: pending</span><button class="b s" onclick="act('admin_mark_conference_paid','${p.id}')">Mark paid</button>`;
+  return `<div class="r1"><div><b>${esc(p.name)}</b><br><small>${esc(p.email)} ${esc(p.candidate_id||'')}</small></div><div>${s}</div><div>${c}</div></div>`}).join('')||'<p>No profiles found.</p>'}
+async function act(fn,id){const {error}=await db.rpc(fn,{p_user:id});if(error)alert(error.message);admin()}
+async function resched(id){const d=prompt('New exam date (YYYY-MM-DD):',S.exam_day);if(!d)return;
+ const {error}=await db.rpc('admin_set_exam_date',{p_user:id,p_date:d});if(error)alert(error.message);admin()}
+async function examAll(o){const {data,error}=await db.rpc('admin_open_exam_all',{p_open:o});
+ alert(error?error.message:'Exam '+(o?'opened':'closed')+' for '+data+' candidate(s).');admin()}
+async function setS(f,v){const {error}=await db.from('settings').update({[f]:v}).eq('id',1);if(error)alert(error.message);admin()}
+function pick(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('qt').value+=($('qt').value?'\n':'')+r.result};r.readAsText(f)}
+async function upq(){const sub=$('qs').value,rs=[];let bad=0;
+ $('qt').value.split('\n').map(x=>x.trim()).filter(Boolean).forEach(l=>{const p=l.split('|').map(x=>x.trim()),a=(p[5]||'').toUpperCase();
+  if(p.length!==6||a.length!==1||!'ABCD'.includes(a)){bad++;return}rs.push({subject:sub,q:p[0],a:p[1],b:p[2],c:p[3],d:p[4],ans:a})});
+ let n=0;for(let i=0;i<rs.length;i+=300){const {data,error}=await db.rpc('admin_upload_questions',{p_rows:rs.slice(i,i+300)});
+  if(error){$('um').textContent='Error: '+error.message+' (uploaded so far: '+n+')';return}n+=data}
+ $('um').textContent=n+' '+sub+' question(s) uploaded.'+(bad?' '+bad+' line(s) skipped - check the format.':'');$('qt').value='';
+ const sv=await Promise.all(SUBJ.map(s=>db.from('questions').select('*',{count:'exact',head:true}).eq('subject',s)));
+ $('um').textContent+='  Totals: '+SUBJ.map((s,i)=>s+' '+(sv[i].count||0)).join(', ')}
+function lbPDF(){const r=AD.filter(p=>p.exam_taken).sort((a,b)=>b.exam_score-a.exam_score).slice(0,81);
+ if(!r.length)return alert('No submitted exams yet.');
+ const d=new window.jspdf.jsPDF();d.setFontSize(16);d.text('AYOMI STEM Contest 2.0 - Leaderboard (Top 81)',14,16);d.setFontSize(10);
+ let y=28;d.text('Pos',14,y);d.text('Name',30,y);d.text('Candidate ID',115,y);d.text('Score',165,y);y+=7;
+ r.forEach((p,i)=>{if(y>280){d.addPage();y=20}d.text(String(i+1),14,y);d.text((p.name||'').slice(0,45),30,y);d.text(p.candidate_id||'',115,y);d.text(p.exam_score+'/100',165,y);y+=6});
+ d.save('AYOMI_Leaderboard_Top81.pdf')}
+
+/* ---------- routing ---------- */
+function route(){const a=location.hash.startsWith('#admin');$('site').classList.toggle('hidden',a);$('ad').classList.toggle('hidden',!a);if(a)admin()}
+window.addEventListener('hashchange',route);
+db.auth.onAuthStateChange(e=>{if(e==='PASSWORD_RECOVERY')pw();else if(e==='SIGNED_IN'||e==='SIGNED_OUT')dash()});
+route();dash();setInterval(slots,10000);
+</script></body></html>
